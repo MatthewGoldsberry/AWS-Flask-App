@@ -2,7 +2,7 @@
 
 import sqlite3
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
@@ -34,9 +34,19 @@ def login():
     password = request.form.get("password")
     return f"Login attempted for: {username} with password: {password}"
 
-@app.route("/register")
-def register():
-    return "Register Page"
+@app.route("/signup")
+def signup():
+    return render_template("signup.html")
+
+@app.route("/registered", methods=["POST"])
+def registered():
+    username = request.form.get("username")
+    password = request.form.get("password")
+    email = request.form.get("email")
+    first_name = request.form.get("firstName")
+    last_name = request.form.get("lastName")
+
+    return redirect(url_for("index"))
 
 if __name__ == "__main__":
     app.run(debug=True)
