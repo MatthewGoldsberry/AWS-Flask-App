@@ -1,0 +1,19 @@
+[project]
+name = "aws-flask-app"
+version = "0.1.0"
+description = "Source code for a Flask app to be hosted on an AWS EC2 instance"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "flask>=3.1.2",
+]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.format] 
+quote-style = "double" 
+indent-style = "space"
+
+[tool.ruff.lint] 
+select = ["ALL"]
