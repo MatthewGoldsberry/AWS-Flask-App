@@ -7,6 +7,21 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 # sqlite setup
+conn = sqlite3.connect("users.db")
+cursor = conn.cursor()
+cursor.execute(
+        """
+        create table if not exists users (
+                username text,
+                password text,
+                firstname text,
+                lastname text,
+                email text
+            )
+        """,
+    )
+conn.commit()
+conn.close()
 
 
 @app.route("/")
