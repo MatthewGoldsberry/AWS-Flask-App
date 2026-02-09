@@ -34,5 +34,9 @@ def login():
     password = request.form.get("password")
     return f"Login attempted for: {username} with password: {password}"
 
+@app.route("/register")
+def register():
+    return "Register Page"
+
 if __name__ == "__main__":
     app.run(debug=True)
