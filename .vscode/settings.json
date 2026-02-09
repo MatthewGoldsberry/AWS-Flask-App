@@ -1,0 +1,15 @@
+{
+  "python.defaultInterpreterPath": "aws-flask-app.venv\\Scripts\\python.exe",
+  "python.terminal.activateEnvironment": true,
+  "editor.formatOnSave": true,
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.ruff": "explicit",
+    "source.organizeImports.ruff": "explicit"
+  },
+  "ruff.enable": true,
+  "ruff.organizeImports": true,
+}
