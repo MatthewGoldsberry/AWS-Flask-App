@@ -32,7 +32,7 @@ def index():
 def login():
     username = request.form.get("username")
     password = request.form.get("password")
-    return f"Login attempted for: {username} with password: {password}"
+    return render_template("profile.html")
 
 @app.route("/signup")
 def signup():
@@ -47,6 +47,10 @@ def registered():
     last_name = request.form.get("lastName")
 
     return redirect(url_for("index"))
+
+@app.route("/profile")
+def profile():
+    return "Profile"
 
 if __name__ == "__main__":
     app.run(debug=True)
