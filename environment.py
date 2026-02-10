@@ -4,7 +4,7 @@ import os
 
 from dotenv import load_dotenv
 
-load_dotenv("environment.env")
+load_dotenv("configs/environment.env")
 
 if not (db := os.getenv("DATABASE")):
     raise OSError("'DATABASE' environment variable must be set in a .env file.")  # noqa: EM101, TRY003
