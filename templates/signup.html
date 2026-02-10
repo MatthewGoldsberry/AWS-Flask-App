@@ -9,6 +9,14 @@
 
 <body>
     <div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div style="color: {{ 'green' if category == 'success' else 'red' }};">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
         <h2>Create a New Account</h2>
         <form action="/registered" method="POST">
             <div>

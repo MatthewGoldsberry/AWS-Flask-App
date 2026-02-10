@@ -12,12 +12,12 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         {% for category, message in messages %}
-        <div class="alert alert-{{ category }}" style="color: red; margin-bottom: 10px;">
-            {{ message }}
-        </div>
+        <div style="color: {{ 'green' if category == 'success' else 'red' }};">{{ message }}</div>
         {% endfor %}
         {% endif %}
         {% endwith %}
+
+        <br>
 
         <form action="/login" method="POST">
             <div>
