@@ -1,6 +1,6 @@
 """Flask app implementation."""
 
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from werkzeug import Response
 
 from environment import FLASK_DEBUG, FLASK_SECRET_KEY
@@ -34,16 +34,16 @@ def index() -> str:
 
 
 @app.route("/login", methods=["POST"])
-def login() -> Response | str:
+def login() -> Response:
     """Try to log in user with provided credentials, raising an error if invalid.
 
     Returns:
-        Rendering of profile page if correct credentials, else redirect to login page with error message
+        Redirect to profile page if login is correct, else back to login.
     """
     username = request.form.get("username")
     password = request.form.get("password")
 
-    db_username, db_password, _, _, _ = db_read_query(
+    db_username, db_password, first_name, last_name, email = db_read_query(
         "select * from users where username = ?",
         params=(username,),
     )
@@ -52,7 +52,14 @@ def login() -> Response | str:
         flash("Invalid username or password.", "error")
         return redirect(url_for("index"))
 
-    return render_template("profile.html")
+    session["user_info"] = {
+        "username": db_username,
+        "first_name": first_name,
+        "last_name": last_name,
+        "email": email,
+    }
+
+    return redirect(url_for("profile"))
 
 
 @app.route("/signup")
@@ -77,9 +84,19 @@ def registered():
 
 
 @app.route("/profile")
-def profile():
-    return "Profile"
+def profile() -> str:
+    """Load user's data from session and uploads to html rendering.
+
+    Returns:
+        Rendering of the user's profile info.
+    """
+    user_info = session.get("user_info")
+
+    if not user_info:
+        return redirect(url_for("index"))
+
+    return render_template("profile.html", user=user_info)
 
 
 if __name__ == "__main__":
-    app.run(FLASK_DEBUG)
+    app.run(debug=FLASK_DEBUG)
