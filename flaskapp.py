@@ -87,15 +87,16 @@ def registered():
 def profile() -> str:
     """Load user's data from session and uploads to html rendering.
 
-    Returns:
-        Rendering of the user's profile info.
-    """
-    user_info = session.get("user_info")
+    Sends error message to login page to be displayed when redirected in the event of no user data existing.
 
-    if not user_info:
+    Returns:
+        Rendering of the user's profile info, or redirect to login with error message
+    """
+    if "user_info" not in session:
+        flash("Please log in first.", "error")
         return redirect(url_for("index"))
 
-    return render_template("profile.html", user=user_info)
+    return render_template("profile.html", user=session["user_info"])
 
 
 @app.route("/logout")
