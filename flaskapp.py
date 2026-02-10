@@ -98,5 +98,16 @@ def profile() -> str:
     return render_template("profile.html", user=user_info)
 
 
+@app.route("/logout")
+def logout() -> Response:
+    """Upon logout, clear session and return to landing page.
+
+    Returns:
+        Redirect to landing page
+    """
+    session.clear()
+    return redirect(url_for("index"))
+
+
 if __name__ == "__main__":
     app.run(debug=FLASK_DEBUG)
