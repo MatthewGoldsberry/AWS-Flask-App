@@ -6,25 +6,30 @@ from werkzeug import Response
 from environment import FLASK_DEBUG, FLASK_SECRET_KEY
 from helpers import db_read_query, db_write_query
 
+# type aliases to make return types clearer
+type Rendering = str
+type Redirect = Response
+
+# create and configure the flask app
 app = Flask(__name__)
 app.secret_key = FLASK_SECRET_KEY
 
-# sqlite setup
+# sqlite setup -- ensuring username and email are unique
 db_write_query(
     """
         create table if not exists users (
-                username text,
-                password text,
-                firstname text,
-                lastname text,
-                email text
+                username text unique not null,
+                password text not null,
+                firstname text not null,
+                lastname text not null,
+                email text unique not null
             )
         """,
 )
 
 
 @app.route("/")
-def index() -> str:
+def index() -> Rendering:
     """Landing Page for the Flask App.
 
     Returns:
@@ -34,7 +39,7 @@ def index() -> str:
 
 
 @app.route("/login", methods=["POST"])
-def login() -> Response:
+def login() -> Redirect:
     """Try to log in user with provided credentials, raising an error if invalid.
 
     Returns:
@@ -63,28 +68,51 @@ def login() -> Response:
 
 
 @app.route("/signup")
-def signup():
+def signup() -> Rendering:
+    """Render signup page to gather user info."""
     return render_template("signup.html")
 
 
 @app.route("/registered", methods=["POST"])
-def registered():
-    username = request.form.get("username")
-    password = request.form.get("password")
-    first_name = request.form.get("firstName")
-    last_name = request.form.get("lastName")
-    email = request.form.get("email")
+def registered() -> Redirect:
+    """Read user inputs and injects into database.
+
+    If the username or email already exists in the database, a error flash is created and the user
+    is redirected to the sign up page.
+
+    Returns:
+        Redirect to login page if successful, else to the sign up page
+    """
+    username: str = request.form.get("username")
+    password: str = request.form.get("password")
+    first_name: str = request.form.get("firstName")
+    last_name: str = request.form.get("lastName")
+    email: str = request.form.get("email")
+
+    existing = db_read_query(
+        "select username, email from users where username = ? or email = ?",
+        params=(username, email),
+    )
+
+    if existing != ("", "", "", "", ""):
+        if existing[0] == username:
+            flash("This username is already taken", "error")
+        else:
+            flash("This email is already registered", "error")
+        return redirect(url_for("signup"))
 
     db_write_query(
         "insert into users (username, password, firstname, lastname, email) values (?, ?, ?, ?, ?)",
         params=(username, password, first_name, last_name, email),
     )
 
+    flash("New account successfully created! Sign in to continue.", "success")
+
     return redirect(url_for("index"))
 
 
 @app.route("/profile")
-def profile() -> str:
+def profile() -> Rendering:
     """Load user's data from session and uploads to html rendering.
 
     Sends error message to login page to be displayed when redirected in the event of no user data existing.
@@ -100,7 +128,7 @@ def profile() -> str:
 
 
 @app.route("/logout")
-def logout() -> Response:
+def logout() -> Redirect:
     """Upon logout, clear session and return to landing page.
 
     Returns:
