@@ -1,10 +1,14 @@
 """Keys for the Flask App."""
 
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 
-load_dotenv("configs/environment.env")
+base_dir = Path(__file__).resolve().parent
+env_path = base_dir / "configs" / "environment.env"
+
+load_dotenv(env_path)
 
 if not (db := os.getenv("DATABASE")):
     raise OSError("'DATABASE' environment variable must be set in a .env file.")  # noqa: EM101, TRY003
