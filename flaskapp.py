@@ -35,7 +35,7 @@ def index() -> Rendering:
     Returns:
         Rendering of the login.html file
     """
-    return render_template("login.html")
+    return render_template("index.html")
 
 
 @app.route("/login", methods=["POST"])
@@ -112,7 +112,7 @@ def registered() -> Redirect:
 
 
 @app.route("/profile")
-def profile() -> Rendering:
+def profile() -> Rendering | Response:
     """Load user's data from session and uploads to html rendering.
 
     Sends error message to login page to be displayed when redirected in the event of no user data existing.
