@@ -10,6 +10,10 @@ env_path = base_dir / "configs" / "environment.env"
 
 load_dotenv(env_path)
 
+if not (uf := os.getenv("UPLOAD_FOLDER")):
+    raise OSError("'UPLOAD_FOLDER' environment variable must be set in a .env file.")  # noqa: EM101, TRY003
+UPLOAD_FOLDER: Path = base_dir / uf
+
 if not (db := os.getenv("DATABASE")):
     raise OSError("'DATABASE' environment variable must be set in a .env file.")  # noqa: EM101, TRY003
 DATABASE: Path = base_dir / db

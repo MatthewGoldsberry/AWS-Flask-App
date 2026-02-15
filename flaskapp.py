@@ -6,7 +6,7 @@ from pathlib import Path
 from flask import Flask, flash, redirect, render_template, request, send_file, session, url_for
 from werkzeug import Response
 
-from environment import FLASK_DEBUG, FLASK_SECRET_KEY
+from environment import FLASK_DEBUG, FLASK_SECRET_KEY, UPLOAD_FOLDER
 from helpers import db_read_query, db_write_query
 
 # type aliases to make return types clearer
@@ -19,7 +19,6 @@ app.secret_key = FLASK_SECRET_KEY
 
 # sqlite setup
 BASE_DIR = Path(__file__).resolve().parent
-UPLOAD_FOLDER = BASE_DIR / "uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 
