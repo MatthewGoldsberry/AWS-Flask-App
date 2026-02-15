@@ -8,54 +8,56 @@
 </head>
 
 <body>
-    <div>
-        <h2>Hello {{ user.first_name }} {{user.last_name }}!</h2>
-        <p><b>Username:</b> {{ user.username }}</p>
-        <p><b>Email:</b> {{ user.email }}</p>
-        <p><b>Address:</b> {{ user.address }} </p>
-    </div>
+    <div class="main-container">
+        <div>
+            <h2>Hello {{ user.first_name }} {{user.last_name }}!</h2>
+            <p><b>Username:</b> {{ user.username }}</p>
+            <p><b>Email:</b> {{ user.email }}</p>
+            <p><b>Address:</b> {{ user.address }} </p>
+        </div>
 
-    <br>
+        <br>
 
-    <form action="/upload" method="post">
-        <label>Upload text files:</label>
-        <input type="file" name="files" multiple>
-        <button type="submit">Upload</button>
-    </form>
+        <form action="/upload" method="post">
+            <label>Upload text files:</label>
+            <input type="file" name="files" multiple>
+            <button type="submit">Upload</button>
+        </form>
 
-    <hr>
+        <hr>
 
-    <table>
-        <thead>
-            <tr>
-                <th>File</th>
-                <th>Word Count</th>
-                <th>Download</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for file in files %}
-            <tr>
-                <td>{{ file[0] }}</td>
-                <td>{{ file[1] }}</td>
-                <td>
-                    <a href="{{ url_for('download_file', stored_filename=file[2]) }}">
-                        <button type="button">Download</button>
-                    </a>
-                </td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="3">No files uploaded yet.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>Word Count</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                <tr>
+                    <td>{{ file[0] }}</td>
+                    <td>{{ file[1] }}</td>
+                    <td>
+                        <a href="{{ url_for('download_file', stored_filename=file[2]) }}">
+                            <button type="button">Download</button>
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3">No files uploaded yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <br>
+        <br>
 
-    <div>
-        <a href="/logout">Logout</a>
+        <a href="{{ url_for('logout') }}">
+            <button type="button">Logout</button>
+        </a>
     </div>
 </body>
 
