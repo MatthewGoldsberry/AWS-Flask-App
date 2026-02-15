@@ -210,7 +210,7 @@ def download_file(stored_filename: str) -> Redirect:
     results = db_read_query("select original_filename from files where stored_filename = ?", params=(stored_filename,))
 
     if not results:
-        return "File Not found", 404
+        return "File Not found", 404  # ty:ignore[invalid-return-type]
 
     original_filename = results[0][0]
     file_path = Path.joinpath(app.config["UPLOAD_FOLDER"], stored_filename)
