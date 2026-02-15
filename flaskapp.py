@@ -22,7 +22,8 @@ db_write_query(
                 password text not null,
                 firstname text not null,
                 lastname text not null,
-                email text unique not null
+                email text unique not null,
+                address text not null
             )
         """,
 )
@@ -48,7 +49,7 @@ def login() -> Redirect:
     username = request.form.get("username")
     password = request.form.get("password")
 
-    db_username, db_password, first_name, last_name, email = db_read_query(
+    db_username, db_password, first_name, last_name, email, address = db_read_query(
         "select * from users where username = ?",
         params=(username,),
     )
@@ -62,6 +63,7 @@ def login() -> Redirect:
         "first_name": first_name,
         "last_name": last_name,
         "email": email,
+        "address": address,
     }
 
     return redirect(url_for("profile"))
@@ -83,18 +85,19 @@ def registered() -> Redirect:
     Returns:
         Redirect to login page if successful, else to the sign up page
     """
-    username: str = request.form.get("username")
-    password: str = request.form.get("password")
-    first_name: str = request.form.get("firstName")
-    last_name: str = request.form.get("lastName")
-    email: str = request.form.get("email")
+    username: str = request.form.get("username")  # ty:ignore[invalid-assignment]
+    password: str = request.form.get("password")  # ty:ignore[invalid-assignment]
+    first_name: str = request.form.get("firstName")  # ty:ignore[invalid-assignment]
+    last_name: str = request.form.get("lastName")  # ty:ignore[invalid-assignment]
+    email: str = request.form.get("email")  # ty:ignore[invalid-assignment]
+    address: str = request.form.get("address")  # ty:ignore[invalid-assignment]
 
     existing = db_read_query(
         "select username, email from users where username = ? or email = ?",
         params=(username, email),
     )
 
-    if existing != ("", "", "", "", ""):
+    if existing != ("", "", "", "", "", ""):
         if existing[0] == username:
             flash("This username is already taken", "error")
         else:
@@ -102,8 +105,8 @@ def registered() -> Redirect:
         return redirect(url_for("signup"))
 
     db_write_query(
-        "insert into users (username, password, firstname, lastname, email) values (?, ?, ?, ?, ?)",
-        params=(username, password, first_name, last_name, email),
+        "insert into users (username, password, firstname, lastname, email, address) values (?, ?, ?, ?, ?, ?)",
+        params=(username, password, first_name, last_name, email, address),
     )
 
     flash("New account successfully created! Sign in to continue.", "success")
