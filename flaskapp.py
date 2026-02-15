@@ -79,10 +79,10 @@ def login() -> Redirect:
     user_info = results[0]
     session["user_info"] = {
         "username": user_info[0],
-        "first_name": user_info[1],
-        "last_name": user_info[2],
-        "email": user_info[3],
-        "address": user_info[4],
+        "first_name": user_info[2],
+        "last_name": user_info[3],
+        "email": user_info[4],
+        "address": user_info[5],
     }
 
     return redirect(url_for("profile"))
