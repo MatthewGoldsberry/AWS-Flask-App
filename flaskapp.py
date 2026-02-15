@@ -18,9 +18,10 @@ app = Flask(__name__)
 app.secret_key = FLASK_SECRET_KEY
 
 # sqlite setup
-UPLOAD_FOLDER = Path("uploads")
+BASE_DIR = Path(__file__).resolve().parent
+UPLOAD_FOLDER = BASE_DIR / "uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-Path.mkdir(UPLOAD_FOLDER, exist_ok=True)
+UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 
 db_write_query(
     """
