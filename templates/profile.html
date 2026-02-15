@@ -15,6 +15,45 @@
         <p><b>Address:</b> {{ user.address }} </p>
     </div>
 
+    <br>
+
+    <form action="/upload" method="post">
+        <label>Upload text files:</label>
+        <input type="file" name="files" multiple>
+        <button type="submit">Upload</button>
+    </form>
+
+    <hr>
+
+    <table>
+        <thead>
+            <tr>
+                <th>File</th>
+                <th>Word Count</th>
+                <th>Download</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}
+            <tr>
+                <td>{{ file[0] }}</td>
+                <td>{{ file[1] }}</td>
+                <td>
+                    <a href="{{ url_for('download_file', stored_filename=file[2]) }}">
+                        <button type="button">Download</button>
+                    </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3">No files uploaded yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+
     <div>
         <a href="/logout">Logout</a>
     </div>

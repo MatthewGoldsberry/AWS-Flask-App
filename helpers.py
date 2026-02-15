@@ -34,7 +34,7 @@ def db_write_query(query: str, *, params: tuple | None = None) -> None:
     conn.close()
 
 
-def db_read_query(query: str, *, params: tuple | None = None) -> tuple[str, str, str, str, str, str]:
+def db_read_query(query: str, *, params: tuple | None = None) -> list[tuple]:
     """Return results of SQL read query executed against the database.
 
     Args:
@@ -45,6 +45,6 @@ def db_read_query(query: str, *, params: tuple | None = None) -> tuple[str, str,
         Any: Results of the SQL read query
     """
     conn, cursor = db_query(query, params=params)
-    info = cursor.fetchone()
+    info = cursor.fetchall()
     conn.close()
-    return info or ("", "", "", "", "", "")
+    return info or []
